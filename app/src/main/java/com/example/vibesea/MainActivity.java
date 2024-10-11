@@ -2,11 +2,13 @@ package com.example.vibesea;
 
 import android.content.ContentUris;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.database.Cursor;
+import androidx.appcompat.widget.SearchView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     List<Song> allSongs = new ArrayList<>();
     ActivityResultLauncher<String> storagePermissionLauncher;
     final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+
+    //
+
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         storagePermissionLauncher.launch(permission);
+
+
 
     }
     private void userResponses() {
@@ -165,7 +174,51 @@ public class MainActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(layoutManager);
 
         //set the adapter to recycler view
-        songAdapter = new SongAdapter(this, songs);
+        songAdapter = new SongAdapter(getApplicationContext(), songs);
         recyclerview.setAdapter(songAdapter);
+        
+
+    }
+
+    // para paganahin ung search btn
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_btn, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.searchBtn);
+        SearchView searchView = (SearchView) menuItem.getActionView();  // This should now work correctly
+
+        SearchSong(searchView);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void SearchSong(SearchView searchView) {
+        // search view listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterSongs(newText.toLowerCase());
+                return true;
+            }
+        });
+    }
+
+    private void filterSongs(String query) {
+        List<Song> filterList = new ArrayList<>();
+        if (allSongs.size() > 0) {
+            for (Song song : allSongs) {
+                if (song.getTitle().toLowerCase().contains(query)) {
+                    filterList.add(song);
+
+                }
+            }
+            if (songAdapter != null) {
+                songAdapter.filterSongs(filterList);
+            }
+        }
     }
 }

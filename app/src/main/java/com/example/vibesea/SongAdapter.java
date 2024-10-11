@@ -1,8 +1,11 @@
 package com.example.vibesea;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -36,12 +40,14 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
+
+
         Song song = songs.get(position);
         SongViewHolder viewHolder = (SongViewHolder) holder;
 
         viewHolder.titleHolder.setText(song.getTitle());
-        viewHolder.durationHolder.setText(String.valueOf(song.getDuration()));
-        viewHolder.sizeHolder.setText(String.valueOf(song.getSize()));
+        viewHolder.durationHolder.setText(getDuration(song.getDuration()));
+        viewHolder.sizeHolder.setText(getSize(song.getSize()));
 
         // Set songs BG
         Uri artworkUri = song.getArtworkUri();
@@ -54,10 +60,18 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             }
         }
 
-        viewHolder.itemView.setOnClickListener(view -> Toast.makeText(context, song.getTitle(), Toast.LENGTH_SHORT).show());
+//        viewHolder.itemView.setOnClickListener(
+//                view -> {
+//                    Toast.makeText(context, song.getTitle(), Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent((Activity)viewHolder.itemView.getContext(), MusicPlayerActivity.class);
+//                    ((Activity)viewHolder.itemView.getContext()).startActivity(intent);
+//
+//                }
+//        );
+
     }
 
-    public static class SongViewHolder extends RecyclerView.ViewHolder{
+    public class SongViewHolder extends RecyclerView.ViewHolder{
 
         ImageView artworkHolder;
         TextView titleHolder, durationHolder, sizeHolder;
@@ -68,7 +82,16 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             titleHolder = itemView.findViewById(R.id.titleView);
             durationHolder = itemView.findViewById(R.id.durationView);
             sizeHolder = itemView.findViewById(R.id.sizeView);
+
+
+            itemView.setOnClickListener(view -> {
+                Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), MusicPlayerActivity.class);
+                view.getContext().startActivity(intent);
+            });
+
         }
+
     }
 
     @Override
@@ -87,7 +110,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         int hrs = totalDuration/(1000*60*60);
         int min = (totalDuration%(1000*60*60))/(1000*60);
-        int secs = (((totalDuration%(1000*60*60))%(1000*60*60))%(1000*600))/1000;
+        int secs = (((totalDuration%(1000*60*60))%(1000*60*60))%(1000*60))/1000;
 
         if (hrs <1){
             totalDurationText = String.format("%02d:%02d", min, secs);
@@ -97,5 +120,36 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
 
         return totalDurationText;
+    }
+
+    // get the size of the songs in MB
+    private String getSize(long bytes){
+        String hrSize;
+
+        double k = bytes/1024.0;
+        double m = ((bytes/1024.0)/1024.0);
+        double g = (((bytes/1024.0)/1024.0)/1024.0);
+        double t = ((((bytes/1024.0)/1024.0)/1024.0)/1024.0);
+        // format of the song size
+        DecimalFormat dec = new DecimalFormat("0.00");
+
+        if (t>1){
+            hrSize = dec.format(t).concat(" TB");
+        }else if (g>1){
+            hrSize = dec.format(g).concat(" GB");
+
+        }
+        else if (m>1) {
+            hrSize = dec.format(m).concat(" MB");
+        }
+        else if (k>1){
+            hrSize = dec.format(k).concat(" KB");
+        }
+        else {
+            hrSize = dec.format(bytes).concat(" Bytes");
+
+        }
+
+        return hrSize;
     }
 }
