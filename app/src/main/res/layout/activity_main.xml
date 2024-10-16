@@ -8,23 +8,24 @@
     tools:context=".MainActivity"
     android:background="@drawable/bg">
 
-   <com.google.android.material.appbar.AppBarLayout
-       android:id="@+id/appbar"
-       android:layout_width="0dp"
-       android:layout_height="?attr/actionBarSize"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toTopOf="parent"
-       android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-       android:background="?attr/colorPrimary">
-       <androidx.appcompat.widget.Toolbar
-           android:id="@+id/toolbar"
-           android:layout_width="match_parent"
-           android:layout_height="?attr/actionBarSize"
-           app:titleTextColor="?attr/colorOnPrimary"
-           app:menu="@menu/search_btn"/>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:background="?attr/colorPrimary">
 
-   </com.google.android.material.appbar.AppBarLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="?attr/colorOnPrimary"
+            app:menu="@menu/search_btn"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -35,4 +36,74 @@
         app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingBottom="@dimen/x_sm"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/homeControlWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?attr/colorPrimary">
+        <TextView
+            android:id="@+id/icAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:drawableStartCompat="@drawable/ic_audiotrack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:paddingEnd="@dimen/sm"
+            tools:ignore="Rtlsymmetry" />
+
+        <TextView
+            android:id="@+id/homeSongNameView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icAudio"
+            android:text="Now Playing"
+            app:layout_constraintWidth_percent="0.6"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textColor="@color/black"
+            app:layout_constraintHorizontal_bias="0.2"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/homeSkipPreviousBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/homePlayPauseBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_percent="0.1"
+            android:drawableStart="@drawable/ic_skip_previous"/>
+
+        <TextView
+            android:id="@+id/homePlayPauseBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/homeSongNameView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_percent="0.1"
+            app:drawableStartCompat="@drawable/ic_play"/>
+
+        <TextView
+            android:id="@+id/homeSkipNextBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/homePlayPauseBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_percent="0.1"
+            android:drawableStart="@drawable/ic_skip_next"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include layout="@layout/music_player"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

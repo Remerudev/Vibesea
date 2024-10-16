@@ -14,18 +14,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.MediaMetadata;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     Context context;
     List<Song> songs;
+    ExoPlayer player;
+    ConstraintLayout playerView;
 
-    public SongAdapter(Context context, List<Song> songs) {
+    public SongAdapter(Context context, List<Song> songs, ExoPlayer player, ConstraintLayout playerView) {
         this.context = context;
         this.songs = songs;
+        this.player = player;
+        this.playerView = playerView;
     }
 
     @NonNull
@@ -60,16 +70,46 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             }
         }
 
-//        viewHolder.itemView.setOnClickListener(
-//                view -> {
-//                    Toast.makeText(context, song.getTitle(), Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent((Activity)viewHolder.itemView.getContext(), MusicPlayerActivity.class);
-//                    ((Activity)viewHolder.itemView.getContext()).startActivity(intent);
-//
-//                }
-//        );
+        viewHolder.itemView.setOnClickListener( view -> {
+            if (!player.isPlaying()) {
+                player.setMediaItems(getMediaItems(), position, 0);
+            } else {
+                player.pause();
+                player.seekTo(position, 0);
+            }
+            player.prepare();
+            player.play();
+            Toast.makeText(context, song.getTitle(), Toast.LENGTH_SHORT).show();
+
+            //show music player
+            playerView.setVisibility(View.VISIBLE);
+
+
+
+        });
 
     }
+    private List<MediaItem> getMediaItems() {
+        List<MediaItem> mediaItems = new ArrayList<>();
+
+        for (Song song : songs) {
+            MediaItem mediaItem = new MediaItem.Builder()
+                    .setUri(song.getUri())
+                    .setMediaMetadata(getMetadata(song))
+                    .build();
+
+            mediaItems.add(mediaItem);
+        }
+        return mediaItems;
+    }
+
+    private MediaMetadata getMetadata(Song song) {
+        return new MediaMetadata.Builder()
+                .setTitle(song.getTitle())
+                .setArtworkUri(song.getArtworkUri())
+                .build();
+    }
+
 
     public class SongViewHolder extends RecyclerView.ViewHolder{
 
