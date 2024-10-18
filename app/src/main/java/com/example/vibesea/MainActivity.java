@@ -42,7 +42,6 @@ import com.chibde.visualizer.BarVisualizer;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.jgabrielfreitas.core.BlurImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
     TextView progressView, durationView;
     //audio visualizer
     BarVisualizer audioVisualizer;
-    //blur image view
-    BlurImageView blurImageView;
     //status bar and navigation color
     int defaultStatusColor;
     //repeat mode
@@ -156,8 +153,7 @@ public class MainActivity extends AppCompatActivity {
         durationView = findViewById(R.id.durationView);
         //audio visualizer
         audioVisualizer = findViewById(R.id.visualiazer);
-        //blur image
-        blurImageView = findViewById(R.id.blurImageView);
+
 
         //controls
         playerControl();

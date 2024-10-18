@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">VibeSea</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Log In</string>
+    <string name="signup">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="login_here">Log In Here</string>
+    <string name="already_have_an_account">Already Have an Account?</string>
+    <string name="sign_up_here">Sign Up Here</string>
 </resources>
